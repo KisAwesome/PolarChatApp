@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Manrope';
+  src: url('Manrope-Regular.eot');
+  src: url('Manrope-Regular.eot?#iefix') format('embedded-opentype'),
+       url('Manrope-Regular.svg#Manrope-Regular') format('svg'),
+       url('Manrope-Regular.ttf') format('truetype'),
+       url('Manrope-Regular.woff') format('woff'),
+       url('Manrope-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
