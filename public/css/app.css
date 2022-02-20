@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* @import url("/fonts/Manrope/static/Manrope-Regular.tff"); */
-@import url('/fonts/Manrope/font.css');
+@import url('/fonts/manrope/font.css');
 :root {
   --body-bg-color: #e5ecef;
   --theme-bg-color: #fff;
