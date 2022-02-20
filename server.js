@@ -372,6 +372,7 @@ server.post('/messages',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,re
 
 
 server.all('*', (req, res, next) => {
+    console.log(req.path)
     next(new WebError('Page Not Found', 404))
 })
 
