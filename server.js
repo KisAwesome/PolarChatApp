@@ -32,7 +32,7 @@ const http_server = require("http").createServer(server)
 const io = require('socket.io')(http_server)
 
 
-const dbUrl = 'mongodb://localhost:27017/WebChatApp';
+const dbUrl = 'mongodb+srv://main:ur8ZpkjmTGm3MdAn@cluster0.5g5bk.mongodb.net/WebChatApp?retryWrites=true&w=majority';
 mongoose.connect(dbUrl, {});
 
 
