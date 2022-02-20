@@ -268,18 +268,18 @@ server.post('/register',(req,res,next)=>{
         const user = new User({ username })
         const registeredUser = User.register(user, password).then((d)=>{
             req.flash('success','Account made successfully now login')
-            res.redirect('login')
+            res.redirect('/login')
         }).catch((err)=>{
             if (err instanceof localpassport.errors.UserExistsError){
                 req.flash('error','A user with the given username is already registered')
-                res.redirect('register')
+                res.redirect('/register')
 
             }
 
         })
     } catch (e) {
         req.flash('error', e.message);
-        res.redirect('register');
+        res.redirect('/register');
     }
 })
 

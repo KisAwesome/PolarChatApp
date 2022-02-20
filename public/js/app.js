@@ -99,7 +99,6 @@ socket.on('connect', () => {
       axios.post('/conversations', {
       })
       .then(function (response) {
-        console.log(response.data)
         for (let i of response.data){
           if (i.private){
             const _name = i.participants.filter(x=>x!==socket.username)
@@ -124,7 +123,6 @@ socket.on('connect', () => {
         }
       })
       .catch(function (error) {
-        console.log(error);
       });
       loaded = true
     }
@@ -132,7 +130,6 @@ socket.on('connect', () => {
   })
 })
 // socket.onAny((event, ...args) => {
-//     console.log(event, args);
 //   });
 
 function openConversation(){
@@ -147,7 +144,6 @@ function openConversation(){
 
     }else{
       let previousError = document.getElementById('contactErrorText')
-      console.log(previousError)
       if (previousError){
         previousError.innerText = resp.info
       }
@@ -340,5 +336,5 @@ function refresh_timings(){
 
   }
 }
-setInterval(refresh_timings,990)
+setInterval(refresh_timings,1000*60)
 setInterval(reload,400)
