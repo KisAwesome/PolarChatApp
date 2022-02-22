@@ -141,6 +141,9 @@ io.on('connect', (socket) => {
         try{
 
             const {channel,message} = message_info
+            if (message.length>2048){
+                return  cb({success:false,info:'Message too long'})
+            }
             if (!(channel && message)){
                 return cb({success:false,info:"Incomplete form"})
             }
@@ -153,7 +156,7 @@ io.on('connect', (socket) => {
             if (!channelInfo.participants.includes(socket.request.user.username)){
                 return cb({success:false,info:'You cannot send a message here'})
             }
-            if (!channelInfo){
+            if (!channelInfo){                      
                 return cb({success:false,info:'Conversation does not exist'})
                 
             }
@@ -283,6 +286,11 @@ server.post('/register',(req,res,next)=>{
     }
 })
 
+server.get('/settings',middleware.isLoggedIn,utilFuncs.catchAsync((req,res)=>{
+    res.render('setting')
+}))
+
+
 server.post('/conversations',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,res)=>{
     const conversations = await channelModel.find({participants:{$all:[req.user.username]}})
     const ClientConversations = []
@@ -385,8 +393,8 @@ server.use((err, req, res, next) => {
 
 
 
-// http_server.listen(3030,'localhost')
-http_server.listen(process.env.PORT)
+http_server.listen(3030,'localhost')
+// http_server.listen(process.env.PORT)
 // server.listen(3030,'localhost',()=>{console.log('Server is on')})
 
 
