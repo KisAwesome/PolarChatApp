@@ -393,8 +393,8 @@ server.use((err, req, res, next) => {
 
 
 
-http_server.listen(3030,'localhost')
-// http_server.listen(process.env.PORT)
+// http_server.listen(3030,'localhost')
+http_server.listen(process.env.PORT)
 // server.listen(3030,'localhost',()=>{console.log('Server is on')})
 
 
