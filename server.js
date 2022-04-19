@@ -21,7 +21,7 @@ const hpp = require('hpp')
 const mongoSanitize = require('express-mongo-sanitize');
 const bodyParser = require('body-parser')
 const rateLimiter = require('express-rate-limit')
-const MongoRateLimitStore = require('rate-limit-mongo')
+const MongoRateLimitStore = require('rate-limit-mongo');
 // const sharedsession = require("express-socket.io-session");
 
 
@@ -133,9 +133,59 @@ io.use((socket, next) => {
 
   
 io.on('connect', (socket) => {
-    socket.on('whoami', (cb) => {
-        cb(socket.request.user ? socket.request.user.username : '');
-    });
+    socket.on('add_member',async (userInfo,cb)=>{
+        const {channel,member} = userInfo
+        if (!isValidObjectId(channel)){
+            return cb({success:false,info:'Invalid object id'})
+        }
+
+        
+        const channelInfo = await channelModel.findById(channel)
+        if (!channelInfo.participants.includes(socket.request.user.username)){
+            return cb({success:false,info:'You cannot add a member here'})
+        }
+        if (!channelInfo){                      
+            return cb({success:false,info:'Conversation does not exist'})
+            
+        }
+        if (channelInfo.participants.includes(member)){
+            return cb({success:false,info:'User already in groupchat'})
+        }
+        if (!await getUser(member)){
+            return cb({success:false,info:'Account does not exist'})
+        }
+        channelInfo.id = channelInfo._id
+        delete channelInfo._id
+        channelInfo.participants.push(member)
+        // await channelModel.findByIdAndUpdate(channel,{$push:{participants:member}})
+        let lastmessage = (await messageModel.find({channel:channel})).pop()
+        channelInfo.lastmessage = lastmessage 
+        
+        const messageInfo = {channel,from:'',time:Date.now(),message:`${socket.request.user.username} added ${member} to the group`,sysalert:true}
+        cb({success:true,alert:messageInfo})
+        const message = new messageModel(messageInfo)
+        await message.save()
+
+        let session = await getSessionUser(member)
+        console.log(session)
+        if (session){
+            socket.to(session.socketId).emit('conversation',channelInfo)
+        }
+
+        for (let i of channelInfo.participants){
+            if (i===socket.request.user.username) continue
+            if (i===member) continue
+
+            let session = await getSessionUser(i)
+            if (session){
+                socket.to(session.socketId).emit('new_member',{alert:messageInfo,user:member})
+            }
+            
+        }
+
+        
+        
+    })
 
     socket.on('send_message', async (message_info,cb)=>{
         try{
@@ -181,6 +231,7 @@ io.on('connect', (socket) => {
             
 
     })
+
  
     socket.on('openconversation',async (user,cb)=>{
         try{
@@ -201,7 +252,7 @@ io.on('connect', (socket) => {
             if (conv){
                 return cb({success:false,info:"Conversation already exists"})
             }
-            const channelInfo = {participants:[user,socket.request.user.username],private:true,name:''}
+            const channelInfo = {participants:[user,socket.request.user.username],private:true,name:'',time:Date.now(),opener:socket.request.user.username}
             const channel = new channelModel(channelInfo)
             await channel.save()
             cb({success:true,info:'Created successfully',id:channel.id})
@@ -257,12 +308,21 @@ server.get('/register',(req,res)=>{
     res.render('register')
 })
 
-server.get('/userstatus',async (req,res)=>{
- 
-})
+
 
 server.get('/app',middleware.isLoggedIn,(req,res)=>{
-    res.render('index')
+    res.render('index',{username:req.user.username})
+})
+
+server.post('/creategroupchat',middleware.isLoggedIn,async (req,res)=>{
+    const {name} = req.body
+    const channelInfo = {name,participants:[req.user.username],private:false,time:Date.now(),opener:req.user.username}
+    const channel = new channelModel(channelInfo)
+    await channel.save()
+    channelInfo.id = channel._id
+    res.send({success:true,channel:channelInfo})
+    
+
 })
 
 server.post('/register',(req,res,next)=>{
@@ -287,7 +347,7 @@ server.post('/register',(req,res,next)=>{
 })
 
 server.get('/settings',middleware.isLoggedIn,utilFuncs.catchAsync((req,res)=>{
-    res.render('setting')
+    res.render('settings')
 }))
 
 
@@ -332,33 +392,44 @@ server.post('/typing',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,res)
 
 
 server.post('/status',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,res)=>{
-    const session = await getSessionUser(req.body.user)
-    if (!isValidObjectId(req.body.channel)){
-        return res.send({success:false,info:'Unvalid channel id'})
+    const resp = {}
+    for (let user__ of req.body.users){        
+        const {user , channel} = user__
+        const session = await getSessionUser(user)
+        if (!isValidObjectId(channel)){
+            resp[user] = {success:false,info:'Unvalid channel id'}
+            continue
+        }
+        
+        let Channel = await channelModel.findById(channel)
+        if (!Channel){
+            resp[user] = {success:false,info:'Conversation does not exist'}
+            continue
+        }
+        if (!Channel.participants.includes(req.user.username)){
+            resp[user] = {success:false,info:'You do not have access to this conversation'}
+            continue
+        }
+            
+        if (!session){
+            resp[user] = {online:false,typing:false}
+            continue
+        }
+    
+        
+        const sockets = (await io.fetchSockets()).map(socket => socket.id);
+        if (session.typing && !sockets.includes(session.session.socketId)){
+            session.typing = false
+            MongoSessionStore.set(session._id,session,err=>{})
+            resp[user] = {online:false,typing:false}
+            continue
+        }
+        
+        const typing = session.session.typing === channel
+        resp[user] = {typing,online:sockets.includes(session.session.socketId)}
     }
-
-    let channel = await channelModel.findById(req.body.channel)
-    if (!channel){
-        return res.send({success:false,info:'Conversation does not exist'})
-    }
-    if (!channel.participants.includes(req.user.username)){
-        return res.status(401).send({success:false,info:'You do not have access to this conversation'})
-    }
-
-    if (!session){
-        return res.send({online:false,typing:false})
-    }
-
-    const sockets = (await io.fetchSockets()).map(socket => socket.id);
-    if (session.typing && !sockets.includes(session.session.socketId)){
-        session.typing = false
-        MongoSessionStore.set(session._id,session,err=>{})
-        return res.send({online:false,typing:false})
-    }
-
-    const typing = session.session.typing === req.body.channel
-    res.send({typing,online:sockets.includes(session.session.socketId)})
-
+    res.send(resp)
+        
 }))
 
 server.post('/messages',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,res) =>{
@@ -380,7 +451,6 @@ server.post('/messages',middleware.isLoggedIn,utilFuncs.catchAsync(async (req,re
 
 
 server.all('*', (req, res, next) => {
-    console.log(req.path)
     next(new WebError('Page Not Found', 404))
 })
 
@@ -393,8 +463,8 @@ server.use((err, req, res, next) => {
 
 
 
-// http_server.listen(3030,'localhost')
-http_server.listen(process.env.PORT)
+http_server.listen(3030,'localhost')
+// http_server.listen(process.env.PORT)
 // server.listen(3030,'localhost',()=>{console.log('Server is on')})
 
 

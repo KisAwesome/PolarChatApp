@@ -4,7 +4,8 @@ const MessageSchema = new mongoose.Schema({
     from:String,
     channel:String,
     time:Number,
-    message:String
+    message:String,
+    sysalert:{type:Boolean,default:false}
 })
 
 

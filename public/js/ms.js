@@ -8,20 +8,9 @@
  var d = h * 24;
  var y = d * 365.25;
  
- /**
-  * Parse or format the given `val`.
-  *
-  * Options:
-  *
-  *  - `long` verbose formatting [false]
-  *
-  * @param {String|Number} val
-  * @param {Object} [options]
-  * @throws {Error} throw an error if val is not a non-empty string or a number
-  * @return {String|Number}
-  * @api public
-  */
- 
+
+
+
 function ms(val, options) {
    options = options || {};
    var type = typeof val;
@@ -36,13 +25,6 @@ function ms(val, options) {
    );
  };
  
- /**
-  * Parse the given `str` and return milliseconds.
-  *
-  * @param {String} str
-  * @return {Number}
-  * @api private
-  */
  
  function __parse(str) {
    str = String(str);

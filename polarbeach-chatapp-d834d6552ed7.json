@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "polarbeach-chatapp",
+  "private_key_id": "d834d6552ed7d2ee0ab5547b4f4d9eb50402a2aa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCzkLpMuT4/8If/\nXhocxHcl8ULbLjc+WSNAHuNod0IdMfooR0ERAxAu0bTnX5h8jSwfL/lKrWQqRy9e\n1GaeWVgLeC48OFnMm4f6SnewaVQKfdY9TP7fCtH/BPu8XGsQVSKJOPdg0uYwhp8F\nbRTCznI/ssf47U/EqRqzYgfYo+uOLHmqPhtatpUIyAcrdvIhVIoFD3nfoc3amDn9\nnGMe/ENLDpaFlixLwrLoTlm4BIJXIzKxD9vTaHCxqBVTTsC4xec5CTG9DSwvn2B7\nf86lZY8YoIZRa7+BXEPhknpWiukBuUaORuzf8qSFH3MsLmt0wSTGjjV3v/qI6lE2\nCXztXgiJAgMBAAECggEADRz6nfPBOgYkyF9k5MjsMpcl3L/JRQJZcqtOzCg5acxm\nil55v/ZLTj/+SA9RIXdly3lDaVK0R+oe6Xv1aob3yQ6jwb4TwL9y9LJPf1CR1JpP\n9PYUftFZeJgykhTltLGi7gZ8+lMsgEq0fj7zDy7oZQJ3XBRoiOIYkxULoaSG5UD2\n4WUOOhV5+gSbF+LUEQsloaRr5jx05zgpeEU9bpBz11yxgIXibNnf0m1NGPll5tv+\nd8OZh9Vtq7m/brW/uRo9fYAW7cki+WcD/4TjTPOa5nWFe48Y9p8KTthmQEszVlm7\n9LtlwxjI7oxD3ywyT6T9QVZlC4NqVEwcdwnbSxnfSQKBgQDf53ETgYLldxt7Yous\nRF894KIcw/gRJbqoU6mvyRC3Kd343RfJ+sxO8rlhS8Aa97dJQcChQcxWNTf1CKNC\ny1SUBhrFYJLETi3BgrBO5i+uRT6nmUqJ+I/THakbLYq09EsAWIewRIoAMHInaVuT\neVkLKVzTz5lhvoDWIraLaI74mwKBgQDNTjKS3BsvOL5aHtO9eN5Cyv19DzwF5bKi\nOPDKdBgiw/udfHOHSqJ7sUT5zIWByF+Jzw1Cur7KguNHvgllYkPvMBC9kJLBm1+S\n2s8iXPShEB+nPxsVWUzD5NK9ldPTsE1O9Q86+dd4ZfGGoR8lqDby3sogZ541GhZs\nrci1jzr7qwKBgDE6SIE6Y1YiJtes5fqdGbeYEOx0JbFXcz+ZDWDJuzQaL2SM77MH\nwi3Fbf63Uehb+F9R5pFNzyhRERl9qa+A1vqokPA+eGZSrfqyyiK+t1MAhHMC4AGP\ntcd76PdBvxJj961+yW5200SRYjfKEUlOT8aFdJRZO2bjJJ5wCWSDO5PrAoGAf+Dm\nRW2ODTLF9jJfZxRDNM1laSE1HOM/CiZ3bVM0uWrjbevXtfx6CpuXQBTxT650O81Z\nEChrsI4obUZkad70O6bvtnO3xZo2xK0/+cJ2qV/2p2D6SKjv1NDRpz8Myz10Werw\niqaWXKr67wWq9fS6DTtSIS8Jb0AJmbYBX32QmrMCgYBC0LAVRDuHX2EUQNYirfdl\nc/4s6l7O5PnYp7yI5E0zxhiBsdy9KtN80Kb9qUXRe3fGlPt+4NaOskfiTl7rmzxC\n88WCWX2YxdQsRaWch1pJxjHYiid6lZpuMYAgGBEsQkAUF4PFnarvd+8/01+t4LyV\nTqe4mGXfG2ne7xxODF9lbA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "polarfiles@polarbeach-chatapp.iam.gserviceaccount.com",
+  "client_id": "114204882887373035709",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/polarfiles%40polarbeach-chatapp.iam.gserviceaccount.com"
+}
