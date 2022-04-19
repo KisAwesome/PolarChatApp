@@ -1,9 +1,0 @@
-groupchat
-file upload
-email forgot password
-switch to user id based system
-
-settings:
-profile upload 
-who can add 
-
